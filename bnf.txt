@@ -1,0 +1,114 @@
+program : function
+|function program
+;
+function : FUNC return_type IDENT LEFT_PARANT parameter_list RIGHT_PARANT
+;
+return_type : data_type
+| empty
+;
+parameter_list : empty
+| VOID
+| data_type IDENT
+| parameter_list COMMA data_type IDENT
+;
+block : CURLY_OPEN stmt_list CURLY_CLOSE
+| CURLY_OPEN empty CURLY_CLOSE
+;
+stmt_list : stmt
+| stmt_list stmt
+;
+stmt : declaration SEMICOLON
+| assignment SEMICOLON
+| function_call SEMICOLON
+| CONTINUE SEMICOLON
+| RETURN SEMICOLON
+| RETURN IDENT SEMICOLON
+| RETURN factor SEMICOLON
+| loop
+| if_stmt
+;
+declaration : data_type IDENT
+| declaration EQUAL_OP RHS
+| data_type IDENT SQR_BRACKET_OPEN INT_LITERAL SQR_BRACKET_CLOSE
+| data_type IDENT SQR_BRACKET_OPEN INT_LITERAL SQR_BRACKET_CLOSE EQUAL_OP CURLY_OPEN factor_list CURLY_CLOSE
+| data_type DOLLAR_SIGN IDENT SQR_BRACKET_OPEN INT_LITERAL SQR_BRACKET_CLOSE EQUAL_OP CURLY_OPEN factor_list CURLY_CLOSE
+
+;
+factor_list : factor
+| factor_list COMMA factor
+;
+RHS : arithmetic_exp
+| function_call
+| bool_exp
+| factor
+;
+factor : INT_LITERAL
+| FLOAT_LITERAL
+| STR_LITERAL
+| CHAR_LITERAL
+;
+assignment_op : EQUAL_OP
+| MULTIPLY_OP
+| DIVIDE_OP
+| SUB_OP
+| ADD_OP
+| MOD_OP
+| POW_OP
+;
+assignment : LHS assignment_op RHS
+| LHS INCREMENT_OP
+| LHS DECREMENT_OP
+;
+LHS : IDENT
+| IDENT SQR_BRACKET_OPEN INT_LITERAL SQR_BRACKET_CLOSE
+;
+loop : while
+| for
+;
+while : WHILE LEFT_PARANT bool_exp RIGHT_PARANT block
+;
+for : FOR LEFT_PARANT for_stmt RIGHT_PARANT block
+;
+for_stmt : for_init SEMICOLON bool_exp SEMICOLON assignment
+;
+for_init : declaration 
+| assignment
+;
+if_stmt : IF LEFT_PARANT bool_exp RIGHT_PARANT block
+| IF LEFT_PARANT function_call RIGHT_PARANT block
+| if_stmt ELIF LEFT_PARANT bool_exp RIGHT_PARANT block
+| if_stmt ELSE block
+;
+bool_exp : comparison
+| IDENT
+| NOT_OP IDENT
+| TRUE
+| FALSE
+;
+comparison : bool_exp relational_op compared
+| bool_exp logic_op compared
+| function_call relational_op compared
+;
+compared : IDENT
+| FALSE
+| TRUE
+| factor
+;
+relational_op : LESS_EQ_OP
+| GREATER_EQ_OP
+| NOT_EQ_OP
+| EQUALITY_OP
+| LESS_OP
+| GREATER_OP
+;
+logic_op : AND_OP
+| OR_OP
+;
+data_type : CHAR
+| INT
+| FLOAT
+| BOOL
+| STR
+;
+empty : 
+;
