@@ -39,30 +39,34 @@ stmt : declaration SEMICOLON
 	| CONTINUE SEMICOLON
 	| RETURN SEMICOLON
 	| RETURN IDENT SEMICOLON
-	| RETURN factor SEMICOLON
+	| RETURN literal SEMICOLON
 	| loop
 	| if_stmt
 	;
 declaration : data_type IDENT
 	| declaration EQUAL_OP RHS
-	| data_type AT_SIGN IDENT EQUAL_OP CURLY_OPEN factor_list CURLY_CLOSE
-	| data_type DOLLAR_SIGN IDENT EQUAL_OP CURLY_OPEN factor_list CURLY_CLOSE
+	| data_type AT_SIGN IDENT EQUAL_OP CURLY_OPEN literal_list CURLY_CLOSE
+	| data_type DOLLAR_SIGN IDENT EQUAL_OP CURLY_OPEN tuple_list CURLY_CLOSE
 	;
-tuple : LEFT_PARANT data_type COMMA data_type RIGHT_PARANT
+tuple_list : tuple
+	| tuple_list COMMA tuple
 	;
-factor_list : factor
-	| factor_list COMMA factor
+tuple : LEFT_PARANT literal COMMA literal RIGHT_PARANT
+	| empty
+	;
+literal_list : literal
+	| literal_list COMMA literal
 	;
 arithmetic_exp : term
-	| arithmetic_exp ADD_OP term
-	| arithmetic_exp SUB_OP term
+	| arithmetic_exp ADD_OP literal
+	| arithmetic_exp SUB_OP literal
 	;
-term : factor
+term : literal
 	| IDENT
-	| term MULTIPLY_OP factor
-	| term DIVIDE_OP factor
-	| term POW_OP factor
-	| term MOD_OP factor
+	| term MULTIPLY_OP literal
+	| term DIVIDE_OP literal
+	| term POW_OP literal
+	| term MOD_OP literal
 	;
 RHS : arithmetic_exp
 	| function_call
@@ -79,11 +83,10 @@ function_call : IDENT LEFT_PARANT parameter_list RIGHT_PARANT
 	| BLTIN_GET_CROSSROADS_NUM LEFT_PARANT parameter_list RIGHT_PARANT
 	| BLTIN_GET_ROADS_NUM LEFT_PARANT parameter_list RIGHT_PARANT
 	;
-factor : INT_LITERAL
+literal : INT_LITERAL
 	| FLOAT_LITERAL
 	| STR_LITERAL
 	| CHAR_LITERAL
-	| tuple
 	;
 assignment_op : EQUAL_OP
 	| MULTIPLY_OP
@@ -129,7 +132,7 @@ comparison : bool_exp relational_op compared
 compared : IDENT
 	| FALSE
 	| TRUE
-	| factor
+	| literal
 	;
 relational_op : LESS_EQ_OP
 	| GREATER_EQ_OP
@@ -152,7 +155,7 @@ empty :
 %%
 #include "lex.yy.c"
 int yyerror (char *s) {
-	printf("Line no: X found error\n");
+        printf("Line no: %d found error\n", yylineno);
 }
 int main (void) {
 	yyparse();

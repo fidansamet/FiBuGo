@@ -66,12 +66,13 @@ getroadsnum	return (BLTIN_GET_ROADS_NUM);
 	}
 {Sign}?{Digit}*"."{Digit}+	return (FLOAT_LITERAL);
 \"(\\.|[^\\"])*\"	return (STR_LITERAL);
-\.(\\.|[^\\'])+\'	return (CHAR_LITERAL);
+\'(\\.|[^\\'])+\'	return (CHAR_LITERAL);
 {Alphabetic}({Digit}|{Alphabetic})*	return (IDENT);
 (\r|\n|\r\n)	yylineno++;
 [ \t\v\f]+	{};
 .	{ yyerror("Non recognized!"); }
 %%
 int yywrap () {
+	printf("The program was compiled successfully.\n");
 	return 1;
 }
