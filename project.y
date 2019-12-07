@@ -1,6 +1,4 @@
 %{
-int yylex();
-void yyerror(const char *s);
 #include <stdio.h>
 #include <stdlib.h>
 %}
@@ -19,7 +17,7 @@ void yyerror(const char *s);
 program : function
 	| function program
 	;
-function : FUNC return_type IDENT LEFT_PARANT parameter_list RIGHT_PARANT
+function : FUNC return_type IDENT LEFT_PARANT parameter_list RIGHT_PARANT block
 	;
 return_type : data_type
 	| empty
@@ -69,7 +67,6 @@ term : factor
 RHS : arithmetic_exp
 	| function_call
 	| bool_exp
-	| factor
 	;
 function_call : IDENT LEFT_PARANT parameter_list RIGHT_PARANT
 	| BLTIN_SHOW_ON_MAP LEFT_PARANT parameter_list RIGHT_PARANT
@@ -154,6 +151,9 @@ empty :
 	;
 %%
 #include "lex.yy.c"
+int yyerror (char *s) {
+	printf("Line no: X found error\n");
+}
 int main (void) {
 	yyparse();
 }
