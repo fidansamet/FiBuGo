@@ -1,11 +1,14 @@
 program : function
-|function program
+| function program
 ;
+
 function : FUNC return_type IDENT LEFT_PARANT parameter_list RIGHT_PARANT
 ;
+
 return_type : data_type
 | empty
 ;
+
 parameter_list : empty
 | VOID
 | data_type IDENT
@@ -29,23 +32,53 @@ stmt : declaration SEMICOLON
 ;
 declaration : data_type IDENT
 | declaration EQUAL_OP RHS
-| data_type IDENT SQR_BRACKET_OPEN INT_LITERAL SQR_BRACKET_CLOSE
-| data_type IDENT SQR_BRACKET_OPEN INT_LITERAL SQR_BRACKET_CLOSE EQUAL_OP CURLY_OPEN factor_list CURLY_CLOSE
-| data_type DOLLAR_SIGN IDENT SQR_BRACKET_OPEN INT_LITERAL SQR_BRACKET_CLOSE EQUAL_OP CURLY_OPEN factor_list CURLY_CLOSE
-
+| data_type AT_SIGN IDENT EQUAL_OP CURLY_OPEN factor_list CURLY_CLOSE
+| data_type DOLLAR_SIGN IDENT EQUAL_OP CURLY_OPEN factor_list CURLY_CLOSE
 ;
+
+tuple : LEFT_PARANT data_type COMMA data_type RIGHT_PARANT
+;
+
 factor_list : factor
 | factor_list COMMA factor
 ;
+
+arithmetic_exp : term
+| arithmetic_exp ADD_OP term
+| arithmetic_exp SUB_OP term
+;
+
+term : factor
+| IDENT
+| term MULTIPLY_OP factor
+| term DIVIDE_OP factor
+| term POW_OP factor
+| term MOD_OP factor
+;
+
 RHS : arithmetic_exp
 | function_call
 | bool_exp
 | factor
 ;
+
+function_call : IDENT LEFT_PARANT parameter_list RIGHT_PARANT
+| BLTIN_SHOW_ON_MAP LEFT_PARANT parameter_list RIGHT_PARANT
+| BLTIN_SEARCH_LOCATION LEFT_PARANT parameter_list RIGHT_PARANT
+| BLTIN_GET_ROAD_SPEED LEFT_PARANT parameter_list RIGHT_PARANT
+| BLTIN_GET_LOCATION LEFT_PARANT parameter_list RIGHT_PARANT
+| BLTIN_TARGET LEFT_PARANT parameter_list RIGHT_PARANT
+| BLTIN_GET_ROADS LEFT_PARANT parameter_list RIGHT_PARANT
+| BLTIN_GET_CROSSROADS LEFT_PARANT parameter_list RIGHT_PARANT
+| BLTIN_GET_CROSSROADS_NUM LEFT_PARANT parameter_list RIGHT_PARANT
+| BLTIN_GET_ROADS_NUM LEFT_PARANT parameter_list RIGHT_PARANT
+;
+
 factor : INT_LITERAL
 | FLOAT_LITERAL
 | STR_LITERAL
 | CHAR_LITERAL
+| tuple
 ;
 assignment_op : EQUAL_OP
 | MULTIPLY_OP
@@ -59,9 +92,10 @@ assignment : LHS assignment_op RHS
 | LHS INCREMENT_OP
 | LHS DECREMENT_OP
 ;
+
 LHS : IDENT
-| IDENT SQR_BRACKET_OPEN INT_LITERAL SQR_BRACKET_CLOSE
 ;
+
 loop : while
 | for
 ;
