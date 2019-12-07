@@ -1,7 +1,7 @@
 %{
 #include <stdio.h>
 #include <string.h>
-#include <"y.tab.h">
+#include "y.tab.h"
 %}
 Digit [0-9]
 Sign [+-]
@@ -27,7 +27,7 @@ while	return (WHILE);
 for	return (FOR);
 continue	return (CONTINUE);
 break	return (BREAK);
-func	return (FUNCTION);
+func	return (FUNC);
 return	return (RETURN);
 "<="	return (LESS_EQ_OP);
 ">="	return (GREATER_EQ_OP);
@@ -49,10 +49,18 @@ return	return (RETURN);
 "}"	return (CURLY_CLOSE);
 "("	return (LEFT_PARANT);
 ")"	return (RIGHT_PARANT);
-"["	return (SQR_BRACKET_OPEN);
-"]"	return (SQR_BRACKET_CLOSE);
 ","	return (COMMA);
-
+"@"	return (AT_SIGN);
+"$"	return (DOLLAR_SIGN);
+showonmap	return (BLTIN_SHOW_ON_MAP);
+searchlocation	return (BLTIN_SEARCH_LOCATION);
+getroadspeed	return (BLTIN_GET_ROAD_SPEED);
+getlocation	return (BLTIN_GET_LOCATION);
+showtarget	return (BLTIN_TARGET);
+getroads	return (BLTIN_GET_ROADS);
+getcrossroads	return (BLTIN_GET_CROSSROADS);
+getcrossroadsnum	return (BLTIN_GET_CROSSROADS_NUM);
+getroadsnum	return (BLTIN_GET_ROADS_NUM);
 {Sign}?{Digit}+	{ sscanf(yytext, "%d", &yylval);
 	return (INT_LITERAL);
 	}
@@ -60,9 +68,9 @@ return	return (RETURN);
 \"(\\.|[^\\"])*\"	return (STR_LITERAL);
 \.(\\.|[^\\'])+\'	return (CHAR_LITERAL);
 {Alphabetic}({Digit}|{Alphabetic})*	return (IDENT);
-(\r|\n|\r\n)	yylineto++;
+(\r|\n|\r\n)	yylineno++;
 [ \t\v\f]+	{};
-.	{yyerror("Non recognized!");}
+.	{ yyerror("Non recognized!"); }
 %%
 int yywrap () {
 	return 1;
