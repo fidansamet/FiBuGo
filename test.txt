@@ -1,16 +1,13 @@
 func int main() {
 
     int i;
-    i = 10;
-    i--;
+    i = -10;
 
     int ii = 5;
-    ii++;
     
 
     float f;
     f = 1.4;
-    f++;
 
     float ff = 2.3;
 
@@ -31,9 +28,8 @@ func int main() {
 	int $graph1 = {(1,2), (3,4)};
     string $graph = {("qr","wr"), ("er","rr")};
     string $empgraph = {};
-	int y = 4+5;
-    int aa = 4%5+892932-983;
-    int arith = 3*4*6/98;
+    int a = +5++4*-4/+1;
+    float ab = +5.0++4.1*-4.3/+1.0;
 
     int x = mulfunc();
     int xx = divfunc(12,3);

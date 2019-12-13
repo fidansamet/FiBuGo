@@ -4,7 +4,6 @@
 #include "y.tab.h"
 %}
 Digit [0-9]
-Sign [+-]
 Alphabetic [A-Za-z]
 %%
 "//"([a-z]|[0-9]|[A-Z]|" ")*	{}
@@ -42,8 +41,6 @@ return	return (RETURN);
 "+"	return (ADD_OP);
 "^"	return (POW_OP);
 "%"	return (MOD_OP);
-"++"	return (INCREMENT_OP);
-"--"	return (DECREMENT_OP);
 ";"	return (SEMICOLON);
 "{"	return (CURLY_OPEN);
 "}"	return (CURLY_CLOSE);
@@ -61,10 +58,10 @@ getroads	return (BLTIN_GET_ROADS);
 getcrossroads	return (BLTIN_GET_CROSSROADS);
 getcrossroadsnum	return (BLTIN_GET_CROSSROADS_NUM);
 getroadsnum	return (BLTIN_GET_ROADS_NUM);
-{Sign}?{Digit}+	{ sscanf(yytext, "%d", &yylval);
+{Digit}+	{ sscanf(yytext, "%d", &yylval);
 	return (INT_LITERAL);
 	}
-{Sign}?{Digit}*"."{Digit}+	return (FLOAT_LITERAL);
+{Digit}*"."{Digit}+	return (FLOAT_LITERAL);
 \"(\\.|[^\\"])*\"	return (STR_LITERAL);
 \'(\\.|[^\\'])+\'	return (CHAR_LITERAL);
 {Alphabetic}({Digit}|{Alphabetic})*	return (IDENT);
