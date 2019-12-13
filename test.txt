@@ -1,10 +1,12 @@
-func int main() {
+func int main(int a, int b) {
     int c = (-12+-3+-12);
     int c = 4-(-12+-3);
     int c = (12*-3);
     int c = (12/3);
     int c = (12%3);    
-    int c = (12^3);    
+    int c = (12^3);
+	int t = 5 + 4;
+
 
     for (i = 0 ; i < 10; i = i+1) {
         int v = 12;
@@ -42,24 +44,90 @@ func int main() {
     bool bb;
     bb = false;
 
-    int @arr = {1,2,3,4,5,6,7};
+    int $arr = {1,2,3,4,5,6,7};
     
-	int $graph1 = {(1,2), (3,4)};
-    string $graph = {("qr","wr"), ("er","rr")};
-    string $empgraph = {};
     int a = +5+-4*-4/+1;
     int bb = -4-5;
     float ab = +5.0++4.1*-4.3/+1.0;
 
     int x = mulfunc();
-    int xx = divfunc();
+    int xx = divfunc(a, 6);
 
+	gps g = (3.4, 5.7);
+	crossroad c = g;
+	crossroad c1 = (3.4, as);
+	road r2 = ((3.4, 5.7), (3.4, 5.7));
+	road $r3 = {((3.4, 5.7), (3.4, 5.7)), ((3.4, 5.7), (3.4, 5.7))};
+	road $r4 = {r2};
+	road $r5 = {((3.4, 5.7), (3.4, 5.7)), r2};
+	crossroad $kk = {(3.4, 5.7), c, c1};
+	crossroad $kka = {(3.4, 5.7), c, c1};
+
+	graph g = {c2, r3};
+	user usr = ("ali", (3.4, 5.7));
+	user usr2 = (a, (3.4, 5.7));
+	user usr3 = ("a", a);
+	showonmap(longitude,latitude);
+	showonmap(longitude, 5.7);
+	showonmap(5.7, a);
+
+	searchlocation(address);
+	searchlocation("aaaaaaaaa");
+
+	getroadspeed(r);
+	getroadspeed(((3.4, 5.7), (3.4, 5.7)));
+	getroadspeed(((3.4, 5.7), a));
+	getroadspeed((a, (3.4, 5.7)));
+	getroadspeed((a, b));
+
+	getlocation(use);
+	getlocation(("ali", (3.4, 5.7)));
+
+	showtarget(address);
+	showtarget("AsasdasdASD");
+	home h = ("ali", (3.4, 5.7));
+	postoffice h = ("ali", (3.4, 5.7));
+	graph g = {((3.4, 5.7), (3.4, 5.7)), (((3.4, 5.7), (3.4, 5.7)), ((3.4, 5.7), (3.4, 5.7)))};
+	graph g = {((3.4, 5.7), (3.4, 5.7)), a};
+	graph g = {a, (((3.4, 5.7), (3.4, 5.7)), ((3.4, 5.7), (3.4, 5.7)))};
+	home $f = {("ali", (3.4, 5.7)), ("ali", (3.4, 5.7))};
+	home $f = {("ali", (3.4, 5.7))};
+	home $f = {h, h};
+	home $f = {};
+	graph g = {};
+	int $a = {};
+	colloborateusers(a, b);		// adkjhjdaakh
+	colloborateusers(("ali", (3.4, 5.7)), ("ali", (3.4, 5.7)));
+	
+	intructuser(a,);
+	intructuser(a, (3.4, 5.7));
+	intructuser(a, ("ali", (3.4, 5.7)));
+	intructuser(("ali", (3.4, 5.7)), (3.4, 5.7));
+
+	increasescoreofroad(a);
+	increasescoreofroad(((3.4, 5.7), (3.4, 5.7)));
+
+	decreasescoreofroad(a);
+	decreasescoreofroad(((3.4, 5.7), (3.4, 5.7)));
+
+	getscoreofroad(a);
+	getscoreofroad(((3.4, 5.7), (3.4, 5.7)));
+	
+	showroadonmap(a);
+	showroadonmap(((3.4, 5.7), (3.4, 5.7)));
+
+	showcrossroadonmap((3.4, as));
+	showcrossroadonmap((3.4, as));	 // asjdasjk
+	int a = int;
+	int a = 5 / 0;
+	
+	
 }
 
-func int mulfunc() {
+func int mulfunc(int ab, int a) {
     return 12;
 }
 
 func int divfunc(int a, int b) {
-    return a/b;
+    return f / 2;
 }

@@ -47,8 +47,12 @@ return	return (RETURN);
 "("	return (LEFT_PARANT);
 ")"	return (RIGHT_PARANT);
 ","	return (COMMA);
-"@"	return (AT_SIGN);
 "$"	return (DOLLAR_SIGN);
+gps	return (GPS);
+road	return (ROAD);
+crossroad	return (CROSSROAD);
+graph	return (GRAPH);
+user	return (USER);
 showonmap	return (BLTIN_SHOW_ON_MAP);
 searchlocation	return (BLTIN_SEARCH_LOCATION);
 getroadspeed	return (BLTIN_GET_ROAD_SPEED);
@@ -58,6 +62,21 @@ getroads	return (BLTIN_GET_ROADS);
 getcrossroads	return (BLTIN_GET_CROSSROADS);
 getcrossroadsnum	return (BLTIN_GET_CROSSROADS_NUM);
 getroadsnum	return (BLTIN_GET_ROADS_NUM);
+colloborateusers	return (BLTIN_COLLOBORATE_USERS);
+intructuser	return (BLTIN_INSTRUCT_USER);
+increasescoreofroad	return (BLTIN_INCREASE_SCORE_OF_ROAD);
+decreasescoreofroad	return (BLTIN_DECREASE_SCORE_OF_ROAD);
+getscoreofroad	return (BLTIN_GET_SCORE_OF_ROAD);
+showroadonmap	return (BLTIN_SHOW_ROAD_ON_MAP);
+showcrossroadonmap	return (BLTIN_SHOW_CROSSROAD_ON_MAP);
+home	return (HOME);
+hospital	return (HOSPITAL);
+school	return (SCHOOL);
+bridge	return (BRIDGE);
+mall	return (MALL);
+busstop	return (BUSSTOP);
+hotel	return (HOTEL);
+postoffice	return (POSTOFFICE);
 {Digit}+	{ sscanf(yytext, "%d", &yylval);
 	return (INT_LITERAL);
 	}
@@ -69,7 +88,3 @@ getroadsnum	return (BLTIN_GET_ROADS_NUM);
 [ \t\v\f]+	{};
 .	{ yyerror("Non recognized!"); }
 %%
-int yywrap () {
-	printf("The program was compiled successfully.\n");
-	return 1;
-}
