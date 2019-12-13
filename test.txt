@@ -1,5 +1,24 @@
 func int main() {
+    int c = (-12+-3+-12);
+    int c = 4-(-12+-3);
+    int c = (12*-3);
+    int c = (12/3);
+    int c = (12%3);    
+    int c = (12^3);    
 
+    for (i = 0 ; i < 10; i = i+1) {
+        int v = 12;
+    }
+
+    while (i < 12) {
+        i = i+1;
+    }
+
+    if (i < 12) {
+
+    } else {
+        i = 12;
+    }
     int i;
     i = -10;
 
@@ -28,11 +47,12 @@ func int main() {
 	int $graph1 = {(1,2), (3,4)};
     string $graph = {("qr","wr"), ("er","rr")};
     string $empgraph = {};
-    int a = +5++4*-4/+1;
+    int a = +5+-4*-4/+1;
+    int bb = -4-5;
     float ab = +5.0++4.1*-4.3/+1.0;
 
     int x = mulfunc();
-    int xx = divfunc(12,3);
+    int xx = divfunc();
 
 }
 

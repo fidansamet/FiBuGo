@@ -26,6 +26,7 @@ return_type : data_type
 parameter_list : empty
 	| VOID
 	| data_type IDENT
+	| parameter_list COMMA literal
 	| parameter_list COMMA data_type IDENT
 	;
 block : CURLY_OPEN stmt_list CURLY_CLOSE
@@ -61,11 +62,10 @@ literal_list : literal
 arithmetic_exp : term
 	| arithmetic_exp ADD_OP term
 	| arithmetic_exp SUB_OP term
-	| SUB_OP arithmetic_exp %prec UMINUS
-	| ADD_OP arithmetic_exp %prec UMINUS
 	;
 term : literal
 	| IDENT
+	| LEFT_PARANT arithmetic_exp RIGHT_PARANT
 	| term MULTIPLY_OP literal
 	| term DIVIDE_OP literal
 	| term POW_OP literal
