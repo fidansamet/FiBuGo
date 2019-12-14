@@ -118,6 +118,13 @@ func int main(int a, int b) {
 
 	showcrossroadonmap((3.4, as));
 	showcrossroadonmap((3.4, as));	 // asjdasjk
+
+	addroad(g, ((3.4, 5.7), (3.4, 5.7)));
+	addroad(g, ((3.4, 5.7), (3.4, a)));
+
+	addcrossroad(g, (3.4, as));
+	addcrossroad(g, (3.4, 5.7));
+
 	int a = int;
 	int a = 5 / 0;
 	

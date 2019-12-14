@@ -6,6 +6,7 @@ int errorCount = 0;
 %{
 int yylex();
 int yyerror(char *s);
+void error_msg(char *s);
 %}
 %token CHAR INT FLOAT BOOL STR VOID TRUE FALSE
 %token AND_OP OR_OP DOLLAR_SIGN AT_SIGN NOT_OP IDENT
@@ -20,13 +21,14 @@ int yyerror(char *s);
 %token NEW_LINE WHITE_SPACE UNKNOWN_CHAR
 %token GPS ROAD CROSSROAD ROADS CROSSROADS GRAPH USER
 %token HOME HOSPITAL SCHOOL BRIDGE MALL BUSSTOP HOTEL POSTOFFICE
-%token BLTIN_COLLOBORATE_USERS BLTIN_INSTRUCT_USER BLTIN_INCREASE_SCORE_OF_ROAD BLTIN_DECREASE_SCORE_OF_ROAD BLTIN_GET_SCORE_OF_ROAD BLTIN_SHOW_ROAD_ON_MAP BLTIN_SHOW_CROSSROAD_ON_MAP
+%token BLTIN_COLLOBORATE_USERS BLTIN_INSTRUCT_USER BLTIN_INCREASE_SCORE_OF_ROAD BLTIN_DECREASE_SCORE_OF_ROAD BLTIN_GET_SCORE_OF_ROAD BLTIN_SHOW_ROAD_ON_MAP BLTIN_SHOW_CROSSROAD_ON_MAP BLTIN_ADD_CROSSROAD BLTIN_ADD_ROAD
 %nonassoc UMINUS
 %%
 program : function
 	| function program
 	;
 function : FUNC return_type IDENT LEFT_PARANT parameter_list RIGHT_PARANT block
+	| error {error_msg("Missing 'func', not a valid function declaration!");}
 	;
 return_type : data_type
 	| data_type DOLLAR_SIGN
@@ -66,6 +68,7 @@ stmt_list : stmt
 stmt : declaration SEMICOLON
 	| assignment SEMICOLON
 	| function_call SEMICOLON
+	| BREAK SEMICOLON
 	| CONTINUE SEMICOLON
 	| RETURN SEMICOLON
 	| RETURN arithmetic_exp SEMICOLON
@@ -136,7 +139,7 @@ term : literal
 	| term MULTIPLY_OP literal
 	| term DIVIDE_OP literal
 		{ if ($3) $$ = $1 / $3;
-			else {yyerror("Divide by zero!");}
+			else {error_msg("Divide by zero!");}
 		}
 	| term POW_OP literal
 	| term MOD_OP literal
@@ -148,6 +151,7 @@ term : literal
 RHS : arithmetic_exp
 	| function_call
 	| bool_exp
+	| error{error_msg("Not a valid expression!");}
 
 	;
 function_call : IDENT LEFT_PARANT argument_list RIGHT_PARANT
@@ -167,6 +171,9 @@ function_call : IDENT LEFT_PARANT argument_list RIGHT_PARANT
 	| BLTIN_GET_SCORE_OF_ROAD LEFT_PARANT road_param RIGHT_PARANT
 	| BLTIN_SHOW_ROAD_ON_MAP LEFT_PARANT road_param RIGHT_PARANT
 	| BLTIN_SHOW_CROSSROAD_ON_MAP LEFT_PARANT cross_road RIGHT_PARANT
+	| BLTIN_ADD_CROSSROAD LEFT_PARANT IDENT COMMA cross_road RIGHT_PARANT
+	| BLTIN_ADD_ROAD LEFT_PARANT IDENT COMMA road_param RIGHT_PARANT
+	| error{error_msg("Missing, invalid argument or paranthesis!");}
 	;
 destination : LEFT_PARANT str_param COMMA cross_road RIGHT_PARANT
 	| cross_road
@@ -203,6 +210,7 @@ assignment_op : EQUAL_OP
 assignment : LHS assignment_op RHS
 	;
 LHS : IDENT
+	| error{error_msg("Invalid identifier declaration!");}
 	;
 loop : while
 	| for
@@ -272,13 +280,15 @@ empty :
 #include "lex.yy.c"
 int yyerror (char *s) {
 	errorCount++;
-        printf("%s\nLine no: %d found error\n", s, yylineno);
 }
 int yywrap () {
 	if (errorCount == 0) {
 		printf("The program was compiled successfully.\n");
 	}
 	return 1;
+}
+void error_msg (char *s) {
+	printf("%s Line no: %d found error \n", s, yylineno);
 }
 int main (void) {
 	yyparse();

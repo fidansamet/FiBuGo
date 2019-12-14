@@ -125,7 +125,9 @@ extern int yydebug;
     BLTIN_GET_SCORE_OF_ROAD = 335,
     BLTIN_SHOW_ROAD_ON_MAP = 336,
     BLTIN_SHOW_CROSSROAD_ON_MAP = 337,
-    UMINUS = 338
+    BLTIN_ADD_CROSSROAD = 338,
+    BLTIN_ADD_ROAD = 339,
+    UMINUS = 340
   };
 #endif
 /* Tokens.  */
@@ -209,7 +211,9 @@ extern int yydebug;
 #define BLTIN_GET_SCORE_OF_ROAD 335
 #define BLTIN_SHOW_ROAD_ON_MAP 336
 #define BLTIN_SHOW_CROSSROAD_ON_MAP 337
-#define UMINUS 338
+#define BLTIN_ADD_CROSSROAD 338
+#define BLTIN_ADD_ROAD 339
+#define UMINUS 340
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

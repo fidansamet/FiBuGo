@@ -69,6 +69,8 @@ decreasescoreofroad	return (BLTIN_DECREASE_SCORE_OF_ROAD);
 getscoreofroad	return (BLTIN_GET_SCORE_OF_ROAD);
 showroadonmap	return (BLTIN_SHOW_ROAD_ON_MAP);
 showcrossroadonmap	return (BLTIN_SHOW_CROSSROAD_ON_MAP);
+addcrossroad	return (BLTIN_ADD_CROSSROAD);
+addroad	return (BLTIN_ADD_ROAD);
 home	return (HOME);
 hospital	return (HOSPITAL);
 school	return (SCHOOL);
