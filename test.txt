@@ -96,8 +96,8 @@ func int main(int a, int b) {
 	home $f = {};
 	graph g = {};
 	int $a = {};
-	colloborateusers(a, b);		// adkjhjdaakh
-	colloborateusers(("ali", (3.4, 5.7)), ("ali", (3.4, 5.7)));
+	colloborateusers(a);		// adkjhjdaakh
+	colloborateusers(("ali", (3.4, 5.7)));
 	
 	intructuser(a,);
 	intructuser(a, (3.4, 5.7));
