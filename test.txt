@@ -130,7 +130,20 @@ func int main(int a, int b) {
 	print(5);
 	print(7.9);
 	print('a');
+	print(a, b);
+	print(5, 8);
+	print(a, "a");
+	char a = "";
+	char a = 'a';
+	char a = 'aaaa';
+	char a = "asdasd";
+
+	if (!a) {
+
+	}
+
 	print(5 + 6);		// invalid
+	
 	
 
 	int a = int;

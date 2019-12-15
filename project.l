@@ -41,6 +41,7 @@ return	return (RETURN);
 "+"	return (ADD_OP);
 "^"	return (POW_OP);
 "%"	return (MOD_OP);
+"!"	return (NOT_OP);
 ";"	return (SEMICOLON);
 "{"	return (CURLY_OPEN);
 "}"	return (CURLY_CLOSE);
