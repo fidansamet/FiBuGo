@@ -71,6 +71,7 @@ showroadonmap	return (BLTIN_SHOW_ROAD_ON_MAP);
 showcrossroadonmap	return (BLTIN_SHOW_CROSSROAD_ON_MAP);
 addcrossroad	return (BLTIN_ADD_CROSSROAD);
 addroad	return (BLTIN_ADD_ROAD);
+print	return (BLTIN_PRINT);
 home	return (HOME);
 hospital	return (HOSPITAL);
 school	return (SCHOOL);

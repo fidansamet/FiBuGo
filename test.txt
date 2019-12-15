@@ -125,6 +125,14 @@ func int main(int a, int b) {
 	addcrossroad(g, (3.4, as));
 	addcrossroad(g, (3.4, 5.7));
 
+	print();
+	print("a");
+	print(5);
+	print(7.9);
+	print('a');
+	print(5 + 6);		// invalid
+	
+
 	int a = int;
 	int a = 5 / 0;
 	
