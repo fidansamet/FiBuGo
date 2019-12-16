@@ -76,7 +76,7 @@ stmt : declaration SEMICOLON
 	| if_stmt
 	;
 declaration : data_type IDENT
-	| declaration EQUAL_OP RHS
+	| data_type IDENT EQUAL_OP RHS
 	| data_type DOLLAR_SIGN IDENT EQUAL_OP CURLY_OPEN literal_list CURLY_CLOSE
 	| GPS IDENT EQUAL_OP tuple
 	| GPS DOLLAR_SIGN IDENT EQUAL_OP CURLY_OPEN tuple_list CURLY_CLOSE
@@ -115,8 +115,7 @@ roads_list : empty
 	| roads_list COMMA road
 	| roads_list COMMA IDENT
 	;
-cross_roads_list : empty
-	| cross_road
+cross_roads_list : cross_road
 	| cross_roads_list COMMA cross_road
 	;
 tuple : LEFT_PARANT long_lat_param COMMA long_lat_param RIGHT_PARANT
@@ -152,7 +151,6 @@ RHS : arithmetic_exp
 	| function_call
 	| bool_exp
 	| error{error_msg("Not a valid expression!");}
-
 	;
 function_call : IDENT LEFT_PARANT argument_list RIGHT_PARANT
 	| BLTIN_SHOW_ON_MAP LEFT_PARANT long_lat_param COMMA long_lat_param RIGHT_PARANT
@@ -174,7 +172,6 @@ function_call : IDENT LEFT_PARANT argument_list RIGHT_PARANT
 	| BLTIN_ADD_CROSSROAD LEFT_PARANT IDENT COMMA cross_road RIGHT_PARANT
 	| BLTIN_ADD_ROAD LEFT_PARANT IDENT COMMA road_param RIGHT_PARANT
 	| BLTIN_PRINT LEFT_PARANT argument_list RIGHT_PARANT
-	| error{error_msg("Missing, invalid argument or paranthesis!");}
 	;
 destination : LEFT_PARANT str_param COMMA cross_road RIGHT_PARANT
 	| cross_road
@@ -236,7 +233,7 @@ bool_exp : comparison
 	| TRUE
 	| FALSE
 	;
-comparison : bool_exp relational_op compared
+comparison : IDENT relational_op compared
 	| bool_exp logic_op compared
 	| function_call relational_op compared
 	;

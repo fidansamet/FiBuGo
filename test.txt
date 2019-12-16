@@ -142,12 +142,31 @@ func int main(int a, int b) {
 
 	}
 
-	print(5 + 6);		// invalid
-	
-	
+	if (a == false) {
+	}
 
-	int a = int;
-	int a = 5 / 0;
+	if (a == 5) {
+	}
+
+	if (i > 5) {
+	}
+
+	if (a) {
+
+	}
+	if (a > i) {
+		
+	}
+	if (a == true) {
+		
+	}
+	if (a == true && b) {
+		
+	} elif (a == true || b) {
+
+	}
+	
+	
 	
 	
 }
