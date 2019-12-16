@@ -34,7 +34,7 @@ return_type : data_type
 	| geo_types DOLLAR_SIGN
 	| three_d_objects
 	| three_d_objects DOLLAR_SIGN
-	| empty
+	| VOID
 	;
 parameter_list : empty
 	| VOID
