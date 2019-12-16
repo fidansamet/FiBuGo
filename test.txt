@@ -179,6 +179,11 @@ func int main(int a, int b) {
 	
 }
 
+func void helu () {
+	int a = 5;
+	return true;
+}
+
 func int mulfunc(int ab, int a) {
     return 12;
 }

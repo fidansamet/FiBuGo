@@ -70,6 +70,8 @@ stmt : declaration SEMICOLON
 	| CONTINUE SEMICOLON
 	| RETURN SEMICOLON
 	| RETURN arithmetic_exp SEMICOLON
+	| RETURN TRUE SEMICOLON
+	| RETURN FALSE SEMICOLON
 	| loop
 	| if_stmt
 	;
