@@ -47,6 +47,8 @@ return	return (RETURN);
 "}"	return (CURLY_CLOSE);
 "("	return (LEFT_PARANT);
 ")"	return (RIGHT_PARANT);
+"["	return (SQR_OPEN);
+"]"	return (SQR_CLOSE);
 ","	return (COMMA);
 "$"	return (DOLLAR_SIGN);
 gps	return (GPS);

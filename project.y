@@ -17,7 +17,7 @@ void error_msg(char *s);
 %token LESS_EQ_OP GREATER_EQ_OP NOT_EQ_OP EQUALITY_OP LESS_OP GREATER_OP
 %token EQUAL_OP MULTIPLY_OP DIVIDE_OP SUB_OP ADD_OP MOD_OP POW_OP
 %token INT_LITERAL FLOAT_LITERAL STR_LITERAL CHAR_LITERAL
-%token COMMA SEMICOLON LEFT_PARANT RIGHT_PARANT CURLY_OPEN CURLY_CLOSE
+%token COMMA SEMICOLON LEFT_PARANT RIGHT_PARANT CURLY_OPEN CURLY_CLOSE SQR_OPEN SQR_CLOSE
 %token UNKNOWN_CHAR
 %token GPS ROAD CROSSROAD GRAPH USER
 %token HOME HOSPITAL SCHOOL BRIDGE MALL BUSSTOP HOTEL POSTOFFICE
@@ -150,6 +150,8 @@ term : literal
 RHS : arithmetic_exp
 	| function_call
 	| bool_exp
+	| IDENT SQR_OPEN INT_LITERAL SQR_CLOSE
+	| IDENT SQR_OPEN IDENT SQR_CLOSE
 	| error{error_msg("Not a valid expression!");}
 	;
 function_call : IDENT LEFT_PARANT argument_list RIGHT_PARANT
@@ -287,6 +289,7 @@ int yywrap () {
 }
 void error_msg (char *s) {
 	printf("%s Line no: %d found error \n", s, yylineno);
+	errorCount++;
 }
 int main (void) {
 	yyparse();
