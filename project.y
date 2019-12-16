@@ -77,6 +77,7 @@ stmt : declaration SEMICOLON
 	;
 declaration : data_type IDENT
 	| data_type IDENT EQUAL_OP RHS
+	| data_type DOLLAR_SIGN IDENT
 	| data_type DOLLAR_SIGN IDENT EQUAL_OP CURLY_OPEN literal_list CURLY_CLOSE
 	| GPS IDENT EQUAL_OP tuple
 	| GPS DOLLAR_SIGN IDENT EQUAL_OP CURLY_OPEN tuple_list CURLY_CLOSE
@@ -132,10 +133,7 @@ arithmetic_exp : term
 	| arithmetic_exp ADD_OP term
 	| arithmetic_exp SUB_OP term
 	;
-term : literal
-	| IDENT
-	| LEFT_PARANT arithmetic_exp RIGHT_PARANT
-	| term MULTIPLY_OP literal
+term : term MULTIPLY_OP literal
 	| term DIVIDE_OP literal
 		{ if ($3) $$ = $1 / $3;
 			else {error_msg("Divide by zero!");}
@@ -146,6 +144,11 @@ term : literal
 	| term DIVIDE_OP IDENT
 	| term POW_OP IDENT
 	| term MOD_OP IDENT
+	| factor
+	;
+factor : LEFT_PARANT arithmetic_exp RIGHT_PARANT
+	| literal
+	| IDENT
 	;
 RHS : arithmetic_exp
 	| function_call
@@ -216,27 +219,31 @@ loop : while
 	| for
 	;
 while : WHILE LEFT_PARANT bool_exp RIGHT_PARANT block
+	| WHILE LEFT_PARANT IDENT RIGHT_PARANT block
 	;
 for : FOR LEFT_PARANT for_stmt RIGHT_PARANT block
 	;
 for_stmt : for_init SEMICOLON bool_exp SEMICOLON assignment
+	| for_init SEMICOLON IDENT SEMICOLON assignment
 	;
 for_init : declaration
 	| assignment
 	;
 if_stmt : IF LEFT_PARANT bool_exp RIGHT_PARANT block
+	| IF LEFT_PARANT IDENT RIGHT_PARANT block
 	| IF LEFT_PARANT function_call RIGHT_PARANT block
 	| if_stmt ELIF LEFT_PARANT bool_exp RIGHT_PARANT block
+	| if_stmt ELIF LEFT_PARANT IDENT RIGHT_PARANT block
 	| if_stmt ELSE block
 	;
 bool_exp : comparison
-	| IDENT
 	| NOT_OP IDENT
 	| TRUE
 	| FALSE
 	;
 comparison : IDENT relational_op compared
 	| bool_exp logic_op compared
+	| IDENT logic_op compared
 	| function_call relational_op compared
 	;
 compared : IDENT

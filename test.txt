@@ -164,9 +164,15 @@ func int main(int a, int b) {
 		
 	} elif (a == true || b) {
 
+	} elif (a) {
+
+	} else {
+
 	}
 	int a = a[4];
 	a = a[t];
+
+	int $a;
 	
 	
 	
