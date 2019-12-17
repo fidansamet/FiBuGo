@@ -1,148 +1,267 @@
 program : function
-| function program
-;
-
-function : FUNC return_type IDENT LEFT_PARANT parameter_list RIGHT_PARANT
-;
-
+	| function program
+	;
+function : FUNC return_type IDENT LEFT_PARANT parameter_list RIGHT_PARANT block
+	| error {error_msg("Missing 'func', not a valid function declaration!");}
+	;
 return_type : data_type
-| empty
-;
-
+	| data_type DOLLAR_SIGN
+	| geo_types
+	| geo_types DOLLAR_SIGN
+	| three_d_objects
+	| three_d_objects DOLLAR_SIGN
+	| VOID
+	;
 parameter_list : empty
-| VOID
-| data_type IDENT
-| parameter_list COMMA data_type IDENT
-;
+	| VOID
+	| data_type IDENT
+	| data_type DOLLAR_SIGN IDENT
+	| geo_types IDENT
+	| geo_types DOLLAR_SIGN IDENT
+	| three_d_objects IDENT
+	| three_d_objects DOLLAR_SIGN IDENT
+	| parameter_list COMMA data_type IDENT
+	| parameter_list COMMA data_type DOLLAR_SIGN IDENT
+	| parameter_list COMMA geo_types IDENT
+	| parameter_list COMMA geo_types DOLLAR_SIGN IDENT
+	| parameter_list COMMA three_d_objects IDENT
+	| parameter_list COMMA three_d_objects DOLLAR_SIGN IDENT
+	;
+argument_list : empty
+	| IDENT
+	| literal
+	| argument_list COMMA IDENT
+	| argument_list COMMA literal
+	;
 block : CURLY_OPEN stmt_list CURLY_CLOSE
-| CURLY_OPEN empty CURLY_CLOSE
-;
+	| CURLY_OPEN empty CURLY_CLOSE
+	;
 stmt_list : stmt
-| stmt_list stmt
-;
+	| stmt_list stmt
+	;
 stmt : declaration SEMICOLON
-| assignment SEMICOLON
-| function_call SEMICOLON
-| CONTINUE SEMICOLON
-| RETURN SEMICOLON
-| RETURN IDENT SEMICOLON
-| RETURN factor SEMICOLON
-| loop
-| if_stmt
-;
+	| assignment SEMICOLON
+	| function_call SEMICOLON
+	| BREAK SEMICOLON
+	| CONTINUE SEMICOLON
+	| RETURN SEMICOLON
+	| RETURN arithmetic_exp SEMICOLON
+	| RETURN TRUE SEMICOLON
+	| RETURN FALSE SEMICOLON
+	| loop
+	| if_stmt
+	;
 declaration : data_type IDENT
-| declaration EQUAL_OP RHS
-| data_type AT_SIGN IDENT EQUAL_OP CURLY_OPEN factor_list CURLY_CLOSE
-| data_type DOLLAR_SIGN IDENT EQUAL_OP CURLY_OPEN factor_list CURLY_CLOSE
-;
-
-tuple : LEFT_PARANT data_type COMMA data_type RIGHT_PARANT
-;
-
-factor_list : factor
-| factor_list COMMA factor
-;
-
+	| data_type IDENT EQUAL_OP RHS
+	| data_type DOLLAR_SIGN IDENT
+	| data_type DOLLAR_SIGN IDENT EQUAL_OP CURLY_OPEN literal_list CURLY_CLOSE
+	| GPS IDENT EQUAL_OP tuple
+	| GPS DOLLAR_SIGN IDENT EQUAL_OP CURLY_OPEN tuple_list CURLY_CLOSE
+	| ROAD IDENT EQUAL_OP road
+	| CROSSROAD IDENT EQUAL_OP cross_road
+	| ROAD DOLLAR_SIGN IDENT EQUAL_OP CURLY_OPEN roads_list CURLY_CLOSE
+	| CROSSROAD DOLLAR_SIGN IDENT EQUAL_OP CURLY_OPEN cross_roads_list CURLY_CLOSE
+	| GRAPH IDENT EQUAL_OP CURLY_OPEN graph_arguments CURLY_CLOSE
+	| USER IDENT EQUAL_OP LEFT_PARANT STR_LITERAL COMMA cross_road RIGHT_PARANT
+	| USER IDENT EQUAL_OP LEFT_PARANT IDENT COMMA cross_road RIGHT_PARANT
+	| three_d_objects IDENT EQUAL_OP LEFT_PARANT STR_LITERAL COMMA cross_road RIGHT_PARANT
+	| three_d_objects IDENT EQUAL_OP LEFT_PARANT IDENT COMMA cross_road RIGHT_PARANT
+	| three_d_objects DOLLAR_SIGN IDENT EQUAL_OP CURLY_OPEN three_d_arguments CURLY_CLOSE
+	;
+three_d_arguments : LEFT_PARANT IDENT COMMA cross_road RIGHT_PARANT
+	| LEFT_PARANT STR_LITERAL COMMA cross_road RIGHT_PARANT
+	| IDENT
+	| empty
+	| three_d_arguments COMMA LEFT_PARANT STR_LITERAL COMMA cross_road RIGHT_PARANT
+	| three_d_arguments COMMA LEFT_PARANT IDENT COMMA cross_road RIGHT_PARANT
+	| three_d_arguments COMMA IDENT
+	;
+graph_arguments : empty
+	| IDENT COMMA IDENT
+	| IDENT COMMA LEFT_PARANT roads_list RIGHT_PARANT
+	| LEFT_PARANT cross_roads_list RIGHT_PARANT COMMA IDENT
+	| LEFT_PARANT cross_roads_list RIGHT_PARANT COMMA LEFT_PARANT roads_list RIGHT_PARANT
+	;
+road : LEFT_PARANT tuple COMMA tuple RIGHT_PARANT
+	| LEFT_PARANT tuple COMMA IDENT RIGHT_PARANT
+	| LEFT_PARANT IDENT COMMA tuple RIGHT_PARANT
+	| LEFT_PARANT IDENT COMMA IDENT RIGHT_PARANT
+	;
+cross_road : tuple
+	| IDENT
+	;
+roads_list : empty 
+	| road
+	| IDENT
+	| roads_list COMMA road
+	| roads_list COMMA IDENT
+	;
+cross_roads_list : cross_road
+	| cross_roads_list COMMA cross_road
+	;
+tuple : LEFT_PARANT long_lat_param COMMA long_lat_param RIGHT_PARANT
+	| empty
+	;
+literal_list : empty
+	| literal
+	| literal_list COMMA literal
+	;
+tuple_list : tuple
+	| tuple_list COMMA tuple
+	;
 arithmetic_exp : term
-| arithmetic_exp ADD_OP term
-| arithmetic_exp SUB_OP term
-;
-
-term : factor
-| IDENT
-| term MULTIPLY_OP factor
-| term DIVIDE_OP factor
-| term POW_OP factor
-| term MOD_OP factor
-;
-
+	| arithmetic_exp ADD_OP term
+	| arithmetic_exp SUB_OP term
+	;
+term : term MULTIPLY_OP literal
+	| term DIVIDE_OP literal
+		{ if ($3) $$ = $1 / $3;
+			else {error_msg("Divide by zero!");}
+		}
+	| term POW_OP literal
+	| term MOD_OP literal
+	| term MULTIPLY_OP IDENT
+	| term DIVIDE_OP IDENT
+	| term POW_OP IDENT
+	| term MOD_OP IDENT
+	| factor
+	;
+factor : LEFT_PARANT arithmetic_exp RIGHT_PARANT
+	| literal
+	| IDENT
+	;
 RHS : arithmetic_exp
-| function_call
-| bool_exp
-| factor
-;
-
-function_call : IDENT LEFT_PARANT parameter_list RIGHT_PARANT
-| BLTIN_SHOW_ON_MAP LEFT_PARANT parameter_list RIGHT_PARANT
-| BLTIN_SEARCH_LOCATION LEFT_PARANT parameter_list RIGHT_PARANT
-| BLTIN_GET_ROAD_SPEED LEFT_PARANT parameter_list RIGHT_PARANT
-| BLTIN_GET_LOCATION LEFT_PARANT parameter_list RIGHT_PARANT
-| BLTIN_TARGET LEFT_PARANT parameter_list RIGHT_PARANT
-| BLTIN_GET_ROADS LEFT_PARANT parameter_list RIGHT_PARANT
-| BLTIN_GET_CROSSROADS LEFT_PARANT parameter_list RIGHT_PARANT
-| BLTIN_GET_CROSSROADS_NUM LEFT_PARANT parameter_list RIGHT_PARANT
-| BLTIN_GET_ROADS_NUM LEFT_PARANT parameter_list RIGHT_PARANT
-;
-
-factor : INT_LITERAL
-| FLOAT_LITERAL
-| STR_LITERAL
-| CHAR_LITERAL
-| tuple
-;
+	| function_call
+	| bool_exp
+	| IDENT SQR_OPEN INT_LITERAL SQR_CLOSE
+	| IDENT SQR_OPEN IDENT SQR_CLOSE
+	| error{error_msg("Not a valid expression!");}
+	;
+function_call : IDENT LEFT_PARANT argument_list RIGHT_PARANT
+	| BLTIN_SHOW_ON_MAP LEFT_PARANT long_lat_param COMMA long_lat_param RIGHT_PARANT
+	| BLTIN_SEARCH_LOCATION LEFT_PARANT IDENT RIGHT_PARANT
+	| BLTIN_SEARCH_LOCATION LEFT_PARANT STR_LITERAL RIGHT_PARANT
+	| BLTIN_GET_ROAD_SPEED LEFT_PARANT road_param RIGHT_PARANT
+	| BLTIN_GET_LOCATION LEFT_PARANT user_param RIGHT_PARANT
+	| BLTIN_TARGET LEFT_PARANT STR_LITERAL RIGHT_PARANT
+	| BLTIN_TARGET LEFT_PARANT IDENT RIGHT_PARANT
+	| BLTIN_GET_ROADS LEFT_PARANT cross_road RIGHT_PARANT
+	| BLTIN_GET_CROSSROADS LEFT_PARANT road_param RIGHT_PARANT
+	| BLTIN_GET_ROADS_NUM LEFT_PARANT cross_road RIGHT_PARANT
+	| BLTIN_GET_CROSSROADS_NUM LEFT_PARANT road_param RIGHT_PARANT
+	| BLTIN_COLLOBORATE_USERS LEFT_PARANT user_param RIGHT_PARANT
+	| BLTIN_INSTRUCT_USER LEFT_PARANT user_param COMMA destination RIGHT_PARANT
+	| BLTIN_INCREASE_SCORE_OF_ROAD LEFT_PARANT road_param RIGHT_PARANT
+	| BLTIN_DECREASE_SCORE_OF_ROAD LEFT_PARANT road_param RIGHT_PARANT
+	| BLTIN_GET_SCORE_OF_ROAD LEFT_PARANT road_param RIGHT_PARANT
+	| BLTIN_SHOW_ROAD_ON_MAP LEFT_PARANT road_param RIGHT_PARANT
+	| BLTIN_SHOW_CROSSROAD_ON_MAP LEFT_PARANT cross_road RIGHT_PARANT
+	| BLTIN_ADD_CROSSROAD LEFT_PARANT IDENT COMMA cross_road RIGHT_PARANT
+	| BLTIN_ADD_ROAD LEFT_PARANT IDENT COMMA road_param RIGHT_PARANT
+	| BLTIN_PRINT LEFT_PARANT argument_list RIGHT_PARANT
+	;
+destination : LEFT_PARANT STR_LITERAL COMMA cross_road RIGHT_PARANT
+	| FLOAT_LITERAL
+	| IDENT
+	| tuple
+	;
+user_param : LEFT_PARANT STR_LITERAL COMMA cross_road RIGHT_PARANT
+	| LEFT_PARANT IDENT COMMA cross_road RIGHT_PARANT
+	| IDENT
+	;
+road_param : road
+	| IDENT
+	;
+long_lat_param : FLOAT_LITERAL
+	| IDENT
+	;
+literal : SUB_OP INT_LITERAL
+	| ADD_OP INT_LITERAL
+	| SUB_OP FLOAT_LITERAL
+	| ADD_OP FLOAT_LITERAL
+	| INT_LITERAL
+	| FLOAT_LITERAL
+	| STR_LITERAL
+	| CHAR_LITERAL
+	;
 assignment_op : EQUAL_OP
-| MULTIPLY_OP
-| DIVIDE_OP
-| SUB_OP
-| ADD_OP
-| MOD_OP
-| POW_OP
-;
+	| MULTIPLY_OP
+	| DIVIDE_OP
+	| SUB_OP
+	| ADD_OP
+	| MOD_OP
+	| POW_OP
+	;
 assignment : LHS assignment_op RHS
-| LHS INCREMENT_OP
-| LHS DECREMENT_OP
-;
-
+	;
 LHS : IDENT
-;
-
+	| error{error_msg("Invalid identifier declaration!");}
+	;
 loop : while
-| for
-;
+	| for
+	;
 while : WHILE LEFT_PARANT bool_exp RIGHT_PARANT block
-;
+	| WHILE LEFT_PARANT IDENT RIGHT_PARANT block
+	;
 for : FOR LEFT_PARANT for_stmt RIGHT_PARANT block
-;
+	;
 for_stmt : for_init SEMICOLON bool_exp SEMICOLON assignment
-;
-for_init : declaration 
-| assignment
-;
+	| for_init SEMICOLON IDENT SEMICOLON assignment
+	;
+for_init : declaration
+	| assignment
+	;
 if_stmt : IF LEFT_PARANT bool_exp RIGHT_PARANT block
-| IF LEFT_PARANT function_call RIGHT_PARANT block
-| if_stmt ELIF LEFT_PARANT bool_exp RIGHT_PARANT block
-| if_stmt ELSE block
-;
+	| IF LEFT_PARANT IDENT RIGHT_PARANT block
+	| IF LEFT_PARANT function_call RIGHT_PARANT block
+	| if_stmt ELIF LEFT_PARANT bool_exp RIGHT_PARANT block
+	| if_stmt ELIF LEFT_PARANT IDENT RIGHT_PARANT block
+	| if_stmt ELSE block
+	;
 bool_exp : comparison
-| IDENT
-| NOT_OP IDENT
-| TRUE
-| FALSE
-;
-comparison : bool_exp relational_op compared
-| bool_exp logic_op compared
-| function_call relational_op compared
-;
+	| NOT_OP IDENT
+	| TRUE
+	| FALSE
+	;
+comparison : IDENT relational_op compared
+	| bool_exp logic_op compared
+	| IDENT logic_op compared
+	| function_call relational_op compared
+	;
 compared : IDENT
-| FALSE
-| TRUE
-| factor
-;
+	| FALSE
+	| TRUE
+	| literal
+	;
 relational_op : LESS_EQ_OP
-| GREATER_EQ_OP
-| NOT_EQ_OP
-| EQUALITY_OP
-| LESS_OP
-| GREATER_OP
-;
+	| GREATER_EQ_OP
+	| NOT_EQ_OP
+	| EQUALITY_OP
+	| LESS_OP
+	| GREATER_OP
+	;
 logic_op : AND_OP
-| OR_OP
-;
+	| OR_OP
+	;
 data_type : CHAR
-| INT
-| FLOAT
-| BOOL
-| STR
-;
-empty : 
-;
+	| INT
+	| FLOAT
+	| BOOL
+	| STR
+	;
+three_d_objects : HOME
+	| HOSPITAL
+	| SCHOOL
+	| BRIDGE
+	| MALL
+	| BUSSTOP
+	| HOTEL
+	| POSTOFFICE
+	;
+geo_types : GPS
+	| ROAD
+	| CROSSROAD
+	| USER
+	;
+empty :
+	;
